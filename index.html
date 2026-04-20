@@ -1,498 +1,1015 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>AI-Based CV Analysis | Talent Management</title>
-    <!-- Bootstrap 5 CSS (basic structure only, no extra styling) -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <!-- No custom CSS files - pure structural template -->
-  </head>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI-Based CV Analysis | TalentScan AI</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --black:    #0d0d0d;
+      --ink:      #1a1a2e;
+      --blue:     #1847c8;
+      --blue-mid: #2a5bd7;
+      --blue-light: #e8eeff;
+      --blue-pale: #f0f4ff;
+      --mid:      #5a6278;
+      --rule:     #e2e5ec;
+      --white:    #ffffff;
+      --off:      #f7f8fb;
+    }
 
-  <body>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--white);
+      color: var(--ink);
+      font-family: 'Figtree', sans-serif;
+      font-weight: 300;
+      line-height: 1.75;
+    }
+
+    .navbar {
+      background: var(--white) !important;
+      border-bottom: 1px solid var(--rule);
+      padding: 0.85rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar-brand {
+      font-family: 'Figtree', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--ink) !important;
+      letter-spacing: -0.3px;
+    }
+
+    .navbar-brand span { color: var(--blue); }
+
+    .nav-link {
+      color: var(--mid) !important;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.4rem 0.75rem !important;
+      transition: color 0.15s;
+    }
+
+    .nav-link:hover { color: var(--blue) !important; }
+
+    #hero {
+      padding: 0;
+      min-height: 90vh;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      border-bottom: 1px solid var(--rule);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-inner {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 5rem 0 3rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-kicker {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 1.5rem;
+    }
+
+    #hero h1 {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(3rem, 6.5vw, 5.5rem);
+      font-weight: 400;
+      line-height: 1.05;
+      color: var(--black);
+      letter-spacing: -2px;
+      margin-bottom: 1.8rem;
+      max-width: 800px;
+    }
+
+    #hero h1 em {
+      font-style: italic;
+      color: var(--blue);
+    }
+
+    #hero .hero-sub {
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: var(--mid);
+      max-width: 520px;
+      line-height: 1.7;
+    }
+
+    .hero-bg-num {
+      position: absolute;
+      right: -0.02em;
+      top: 50%;
+      transform: translateY(-60%);
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(14rem, 22vw, 26rem);
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(24, 71, 200, 0.07);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+      z-index: 0;
+    }
+
+    .hero-modules-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--rule);
+    }
+
+    .hero-module {
+      padding: 1.6rem 1.8rem;
+      border-right: 1px solid var(--rule);
+      transition: background 0.2s;
+    }
+
+    .hero-module:last-child { border-right: none; }
+    .hero-module:hover { background: var(--blue-pale); }
+
+    .hero-module-idx {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: var(--blue);
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-module h6 {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--ink);
+      margin: 0;
+      line-height: 1.45;
+    }
+
+    section { padding: 6rem 0; }
+    section + section { border-top: 1px solid var(--rule); }
+
+    .s-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 0.6rem;
+    }
+
+    .s-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      font-weight: 400;
+      color: var(--black);
+      letter-spacing: -1px;
+      line-height: 1.15;
+    }
+
+    .s-rule {
+      width: 32px;
+      height: 2px;
+      background: var(--blue);
+      margin-top: 1rem;
+    }
+
+    .about-img { border-radius: 2px; display: block; width: 100%; }
+
+    .about-text h3 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--black);
+      margin-bottom: 0.75rem;
+    }
+
+    .about-text p { color: var(--mid); font-size: 0.95rem; }
+
+    .feature-list { list-style: none; padding: 0; margin-top: 1.5rem; }
+
+    .feature-list li {
+      display: flex;
+      gap: 1rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--rule);
+      font-size: 0.9rem;
+      color: var(--ink);
+      font-weight: 400;
+    }
+
+    .feature-list li:last-child { border-bottom: none; }
+
+    .feature-list li::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--blue);
+      flex-shrink: 0;
+      margin-top: 0.55rem;
+    }
+
+    #domain { background: var(--off); }
+
+    #domain .nav-tabs {
+      border-bottom: 1px solid var(--rule);
+      flex-wrap: wrap;
+    }
+
+    #domain .nav-link {
+      color: var(--mid) !important;
+      font-size: 0.77rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border: none !important;
+      border-bottom: 2px solid transparent !important;
+      padding: 0.8rem 1.2rem !important;
+      border-radius: 0 !important;
+      background: transparent !important;
+      transition: all 0.15s;
+    }
+
+    #domain .nav-link.active {
+      color: var(--blue) !important;
+      border-bottom-color: var(--blue) !important;
+    }
+
+    #domain .nav-link:hover { color: var(--ink) !important; }
+
+    .tab-content {
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-top: none;
+      padding: 2.2rem 2rem;
+    }
+
+    .tab-pane h4 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--black);
+      margin-bottom: 1rem;
+    }
+
+    .tab-pane p { color: var(--mid); font-size: 0.92rem; line-height: 1.8; }
+    .tab-pane ul { list-style: none; padding: 0; }
+
+    .tab-pane ul li {
+      color: var(--mid);
+      font-size: 0.92rem;
+      padding: 0.45rem 0 0.45rem 1.1rem;
+      position: relative;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .tab-pane ul li:last-child { border-bottom: none; }
+
+    .tab-pane ul li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--blue);
+      font-size: 0.8rem;
+    }
+
+    .milestone-row {
+      display: grid;
+      grid-template-columns: 180px 1fr 48px;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1.1rem 0;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .milestone-row:last-child { border-bottom: none; }
+    .ms-name { font-size: 0.88rem; font-weight: 500; color: var(--ink); }
+    .ms-date { font-size: 0.75rem; color: var(--mid); margin-top: 2px; }
+
+    .ms-bar-wrap {
+      height: 4px;
+      background: var(--rule);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .ms-bar {
+      height: 100%;
+      background: var(--blue);
+      border-radius: 2px;
+    }
+
+    .ms-pct {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--blue);
+      text-align: right;
+    }
+
+    .card-plain {
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      padding: 1.6rem;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .card-plain:hover {
+      border-color: var(--blue);
+      box-shadow: 0 4px 24px rgba(24, 71, 200, 0.06);
+    }
+
+    .card-tag {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blue);
+      background: var(--blue-light);
+      display: inline-block;
+      padding: 0.2rem 0.55rem;
+      border-radius: 2px;
+      margin-bottom: 1rem;
+    }
+
+    .card-plain h5 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--black);
+      margin-bottom: 0.4rem;
+    }
+
+    .card-plain p {
+      font-size: 0.84rem;
+      color: var(--mid);
+      flex: 1;
+      margin-bottom: 1rem;
+    }
+
+    .btn-blue {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--blue);
+      border: 1px solid var(--blue);
+      background: transparent;
+      padding: 0.42rem 0.9rem;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: all 0.15s;
+      width: fit-content;
+    }
+
+    .btn-blue:hover {
+      background: var(--blue);
+      color: var(--white);
+    }
+
+    .not-ready { font-size: 0.78rem; color: var(--mid); font-style: italic; }
+
+    #presentations { background: var(--off); }
+
+    .pres-card {
+      background: var(--white);
+      border: 1px solid var(--rule);
+      padding: 1.8rem 1.5rem;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pres-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--blue);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.2s;
+    }
+
+    .pres-card:hover::before { transform: scaleX(1); }
+    .pres-card:hover { border-color: rgba(24, 71, 200, 0.3); }
+
+    .pres-n {
+      font-family: 'Instrument Serif', serif;
+      font-size: 3rem;
+      color: var(--rule);
+      line-height: 1;
+      margin-bottom: 0.75rem;
+    }
+
+    .pres-card h5 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--black);
+      margin-bottom: 0.3rem;
+    }
+
+    .pres-card p {
+      font-size: 0.8rem;
+      color: var(--mid);
+      flex: 1;
+      margin-bottom: 1rem;
+    }
+
+    .member-card {
+      text-align: center;
+      padding: 2rem 1rem;
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .member-card:hover {
+      border-color: var(--blue);
+      box-shadow: 0 4px 20px rgba(24, 71, 200, 0.07);
+    }
+
+    .avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--blue-light);
+      color: var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.82rem;
+      margin: 0 auto 1rem;
+      border: 1px solid rgba(24, 71, 200, 0.15);
+    }
+
+    .member-card h5 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--black);
+      margin-bottom: 0.2rem;
+    }
+
+    .member-card p { font-size: 0.78rem; color: var(--mid); margin: 0; }
+
+    .sup-row {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      padding: 1.25rem 1.5rem;
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      transition: border-color 0.2s;
+    }
+
+    .sup-row:hover { border-color: var(--blue); }
+
+    .sup-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blue);
+      background: var(--blue-light);
+      padding: 0.2rem 0.55rem;
+      border-radius: 2px;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .sup-row h5 { font-size: 0.95rem; font-weight: 600; color: var(--black); margin-bottom: 0.15rem; }
+    .sup-row p { font-size: 0.82rem; color: var(--mid); margin: 0; }
+
+    #contact { background: var(--ink); color: var(--white); }
+    #contact .s-label { color: rgba(100, 140, 255, 0.85); }
+    #contact .s-title { color: var(--white); }
+    #contact .s-rule { background: var(--blue-mid); }
+
+    .form-control {
+      background: rgba(255,255,255,0.05) !important;
+      border: 1px solid rgba(255,255,255,0.12) !important;
+      color: var(--white) !important;
+      border-radius: 2px !important;
+      font-size: 0.9rem;
+      padding: 0.7rem 1rem;
+      font-family: 'Figtree', sans-serif;
+    }
+
+    .form-control::placeholder { color: rgba(255,255,255,0.3) !important; }
+
+    .form-control:focus {
+      box-shadow: none !important;
+      border-color: var(--blue-mid) !important;
+      background: rgba(255,255,255,0.08) !important;
+    }
+
+    textarea.form-control { resize: none; }
+
+    .btn-submit {
+      background: var(--blue);
+      color: var(--white);
+      border: none;
+      border-radius: 2px;
+      padding: 0.72rem 2.2rem;
+      font-weight: 600;
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: background 0.15s, transform 0.1s;
+      font-family: 'Figtree', sans-serif;
+      cursor: pointer;
+    }
+
+    .btn-submit:hover { background: var(--blue-mid); transform: translateY(-1px); }
+
+    .contact-meta h6 {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 0.3rem;
+    }
+
+    .contact-meta p { font-size: 0.88rem; color: rgba(255,255,255,0.65); margin: 0; }
+
+    footer {
+      background: var(--black);
+      padding: 2.5rem 0;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .footer-brand {
+      font-family: 'Figtree', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-brand span { color: var(--blue-mid); }
+
+    footer p { font-size: 0.82rem; color: rgba(255,255,255,0.35); }
+
+    footer h6 {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 0.75rem;
+    }
+
+    footer ul { list-style: none; padding: 0; }
+
+    footer ul li a, footer ul li {
+      font-size: 0.84rem;
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      display: block;
+      padding: 0.2rem 0;
+      transition: color 0.15s;
+    }
+
+    footer ul li a:hover { color: var(--white); }
+
+    @media (max-width: 768px) {
+      .hero-modules-bar { grid-template-columns: repeat(2, 1fr); }
+      .hero-bg-num { display: none; }
+      section { padding: 4rem 0; }
+      .milestone-row { grid-template-columns: 1fr 48px; gap: 0.75rem; }
+      .milestone-row .ms-bar-wrap { grid-column: 1 / -1; }
+    }
+  </style>
+</head>
+<body>
     <!-- =============================================== -->
     <!-- NAVBAR (basic structure) -->
     <!-- =============================================== -->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-      <div class="container">
-        <a class="navbar-brand" href="#">TalentScan AI.</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link" href="#hero">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-            <li class="nav-item"><a class="nav-link" href="#domain">Domain</a></li>
-            <li class="nav-item"><a class="nav-link" href="#milestones">Milestones</a></li>
-            <li class="nav-item"><a class="nav-link" href="#documents">Documents</a></li>
-            <li class="nav-item"><a class="nav-link" href="#presentations">Presentations</a></li>
-            <li class="nav-item"><a class="nav-link" href="#team">Team</a></li>
-            <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="#">TalentScan<span> AI</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#hero">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#domain">Domain</a></li>
+          <li class="nav-item"><a class="nav-link" href="#milestones">Milestones</a></li>
+          <li class="nav-item"><a class="nav-link" href="#documents">Documents</a></li>
+          <li class="nav-item"><a class="nav-link" href="#presentations">Presentations</a></li>
+          <li class="nav-item"><a class="nav-link" href="#team">Team</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <section id="hero">
+    <div class="container hero-inner">
+      <div class="hero-kicker">Research Project &nbsp;·&nbsp; SLIIT &nbsp;·&nbsp; 2025</div>
+      <h1>AI-Based<br><em>Curriculum Vitae</em><br>Analysis System</h1>
+      <p class="hero-sub">Enhancing decision-making in recruitment and talent management through intelligent, data-driven candidate insights.</p>
+    </div>
+    <div class="hero-bg-num" aria-hidden="true">AI</div>
+    <div class="hero-modules-bar">
+      <div class="hero-module">
+        <div class="hero-module-idx">01</div>
+        <h6>GitHub Question Generation</h6>
+      </div>
+      <div class="hero-module">
+        <div class="hero-module-idx">02</div>
+        <h6>Early Attrition Risk Prediction</h6>
+      </div>
+      <div class="hero-module">
+        <div class="hero-module-idx">03</div>
+        <h6>Market Value Assessment</h6>
+      </div>
+      <div class="hero-module">
+        <div class="hero-module-idx">04</div>
+        <h6>Multi-Source Candidate Evaluation</h6>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-5">
+          <img src="https://plus.unsplash.com/premium_photo-1661288470388-c5006797bdff?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="System Overview" class="about-img" />
+        </div>
+        <div class="col-lg-6 offset-lg-1 about-text">
+          <div class="s-label">About the system</div>
+          <h2 class="s-title">Intelligent Talent Analytics</h2>
+          <div class="s-rule mb-4"></div>
+          <p>Our platform extracts key information from resumes, generates technical screening questions from GitHub profiles, predicts attrition risk using historical patterns, and provides real-time market value benchmarking for candidates.</p>
+          <ul class="feature-list">
+            <li>GitHub-based dynamic question generation for technical screening</li>
+            <li>Early attrition risk prediction using ensemble ML models</li>
+            <li>Real-time market value assessment based on skills and experience</li>
           </ul>
         </div>
       </div>
-    </nav>
+    </div>
+  </section>
 
-    <!-- =============================================== -->
-    <!-- HERO SECTION -->
-    <!-- =============================================== -->
-    <section id="hero">
-      <div class="container">
-        <div class="row">
-          <div class="col-12 text-center">
-            <h1>AI-Based Curriculum Vitae Analysis.</h1>
-            <h2>For Enhancing Decision-Making in Recruitment and Talent Management</h2>
-            <h4>GitHub Question Generation | Early Attrition Risk Prediction | Market Value Assessment</h4>
-          </div>
+  <section id="domain">
+    <div class="container">
+      <div class="row mb-4">
+        <div class="col-lg-6">
+          <div class="s-label">Research</div>
+          <h2 class="s-title">Project Domain</h2>
+          <div class="s-rule"></div>
         </div>
-        <div class="row mt-5 text-center">
-          <div class="col-md-3">
-            <div>
-              <h6>GitHub Question Generation</h6>
-            </div>
+      </div>
+      <ul class="nav nav-tabs" id="domainTab" role="tablist">
+        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#literature" type="button">Literature Survey</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#gap" type="button">Research Gap</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#problem" type="button">Research Problem</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#objectives" type="button">Objectives</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#methodology" type="button">Methodology</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#technologies" type="button">Technologies</button></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="literature">
+          <h4>Literature Survey</h4>
+          <p>Recent studies highlight the use of NLP and transformer models for resume parsing. GitHub-based question generation has emerged as a novel approach for technical screening. Attrition prediction using XGBoost and random forests shows promising accuracy. Market value assessment remains fragmented across salary databases. This research integrates all three components into a unified decision-support system.</p>
+        </div>
+        <div class="tab-pane fade" id="gap">
+          <h4>Research Gap</h4>
+          <p>Existing HR tech solutions address either CV parsing or skill assessment, but none combine GitHub-based dynamic question generation, early attrition risk prediction, and real-time market valuation in a single integrated platform.</p>
+        </div>
+        <div class="tab-pane fade" id="problem">
+          <h4>Research Problem</h4>
+          <p>Traditional recruitment processes suffer from manual CV screening bias, lack of technical validation, inability to predict candidate attrition, and inconsistent compensation benchmarking — leading to suboptimal hiring decisions and increased turnover costs.</p>
+        </div>
+        <div class="tab-pane fade" id="objectives">
+          <h4>Research Objectives</h4>
+          <ul>
+            <li>Develop a GitHub-based question generation module to assess technical skills.</li>
+            <li>Build an early attrition risk prediction model using candidate profile data.</li>
+            <li>Create a market value assessment engine using live salary benchmarks.</li>
+            <li>Integrate all modules into a web-based dashboard for recruiters.</li>
+          </ul>
+        </div>
+        <div class="tab-pane fade" id="methodology">
+          <h4>Methodology</h4>
+          <p>Agile methodology combined with CRISP-DM for the data science pipeline. Data collection from resumes (PDF/DOCX), GitHub API, and salary databases. Feature extraction using NLP embeddings. Models include Random Forest for attrition, regression for market value, and rule-based + LLM for question generation. Deployment via Flask API and Bootstrap frontend.</p>
+        </div>
+        <div class="tab-pane fade" id="technologies">
+          <h4>Technologies Used</h4>
+          <ul>
+            <li>Python — Pandas, Scikit-learn, PyTorch</li>
+            <li>Flask / FastAPI for backend services</li>
+            <li>GitHub REST API for profile analysis</li>
+            <li>React / Bootstrap frontend</li>
+            <li>AWS / Google Cloud deployment</li>
+            <li>PostgreSQL / MongoDB databases</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="milestones">
+    <div class="container">
+      <div class="row mb-5">
+        <div class="col-lg-6">
+          <div class="s-label">Timeline</div>
+          <h2 class="s-title">Project Milestones</h2>
+          <div class="s-rule"></div>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="milestone-row">
+            <div><div class="ms-name">Project Proposal</div><div class="ms-date">February 2025</div></div>
+            <div class="ms-bar-wrap"><div class="ms-bar" style="width:10%"></div></div>
+            <div class="ms-pct">10%</div>
           </div>
-          <div class="col-md-3">
-            <div>
-              <h6>Early Attrition Risk Prediction</h6>
-            </div>
+          <div class="milestone-row">
+            <div><div class="ms-name">Progress Presentation I</div><div class="ms-date">April 2025</div></div>
+            <div class="ms-bar-wrap"><div class="ms-bar" style="width:30%"></div></div>
+            <div class="ms-pct">30%</div>
           </div>
-          <div class="col-md-3">
-            <div>
-              <h6>Market Value Assessment</h6>
-            </div>
+          <div class="milestone-row">
+            <div><div class="ms-name">Progress Presentation II</div><div class="ms-date">April 2025</div></div>
+            <div class="ms-bar-wrap"><div class="ms-bar" style="width:30%"></div></div>
+            <div class="ms-pct">30%</div>
           </div>
-          <div class="col-md-3">
-            <div>
-              <h6>AI-Powered Recruitment</h6>
-            </div>
+          <div class="milestone-row">
+            <div><div class="ms-name">Final Assessment</div><div class="ms-date">April 2025</div></div>
+            <div class="ms-bar-wrap"><div class="ms-bar" style="width:30%"></div></div>
+            <div class="ms-pct">30%</div>
+          </div>
+          <div class="milestone-row">
+            <div><div class="ms-name">Viva</div><div class="ms-date">April 2025</div></div>
+            <div class="ms-bar-wrap"><div class="ms-bar" style="width:30%"></div></div>
+            <div class="ms-pct">30%</div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- =============================================== -->
-    <!-- ABOUT SECTION -->
-    <!-- =============================================== -->
-    <section id="about">
-      <div class="container">
-        <div class="row">
-          <div class="col-12 text-center">
-            <h2>About the System</h2>
-            <hr />
-            <p>AI-based CV analysis platform that leverages machine learning to assist recruiters with data-driven decisions.</p>
+  <section id="documents">
+    <div class="container">
+      <div class="row mb-5">
+        <div class="col-lg-6">
+          <div class="s-label">Resources</div>
+          <h2 class="s-title">Project Documents</h2>
+          <div class="s-rule"></div>
+        </div>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class="card-plain">
+            <span class="card-tag">Form</span>
+            <h5>Topic Assessment Form</h5>
+            <p>Scope, objectives, and project overview document.</p>
+            <a href="https://mysliit-my.sharepoint.com/:f:/g/personal/it22888884_my_sliit_lk/IgCaHQ8EoGGlRIsGmZTveJURAZagufSfe8WcEV4f2G6Vnlo?e=ORt0s5" class="btn-blue" target="_blank">Download ↗</a>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-6">
-            <img src="https://placehold.co/600x400/eeeeee/cccccc?text=CV+Analysis+Overview" alt="CV Analysis" class="img-fluid" />
+        <div class="col-md-4">
+          <div class="card-plain">
+            <span class="card-tag">Proposal</span>
+            <h5>Project Proposal</h5>
+            <p>Goals, timeline, and resource requirements.</p>
+            <a href="https://mysliit-my.sharepoint.com/:f:/g/personal/it22888884_my_sliit_lk/IgCaHQ8EoGGlRIsGmZTveJURAZagufSfe8WcEV4f2G6Vnlo?e=ORt0s5" class="btn-blue" target="_blank">Download ↗</a>
           </div>
-          <div class="col-md-6">
-            <h3>Intelligent Talent Analytics</h3>
-            <p>Our system extracts key information from resumes, generates technical questions from GitHub profiles, predicts attrition risk using historical patterns, and provides market value benchmarking for candidates.</p>
-            <ul>
-              <li>GitHub-based question generation for technical screening</li>
-              <li>Early attrition risk prediction using ML models</li>
-              <li>Real-time market value assessment based on skills & experience</li>
-            </ul>
+        </div>
+        <div class="col-md-4">
+          <div class="card-plain">
+            <span class="card-tag">Status</span>
+            <h5>Status Document</h5>
+            <p>Progress reports and completion checklists.</p>
+            <span class="not-ready">Not ready yet</span>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card-plain">
+            <span class="card-tag">Final</span>
+            <h5>Final Document</h5>
+            <p>Complete research documentation — 4 docs including main report.</p>
+            <span class="not-ready">Not ready yet</span>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- =============================================== -->
-    <!-- DOMAIN SECTION (Literature, Problem, Gap, Objectives, Methodology, Technologies) -->
-    <!-- =============================================== -->
-    <section id="domain">
-      <div class="container">
-        <div class="row">
-          <div class="col-12 text-center">
-            <h2>Project Domain</h2>
-            <hr />
+  <section id="presentations">
+    <div class="container">
+      <div class="row mb-5">
+        <div class="col-lg-6">
+          <div class="s-label">Slides</div>
+          <h2 class="s-title">Project Presentations</h2>
+          <div class="s-rule"></div>
+        </div>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-3">
+          <div class="pres-card">
+            <div class="pres-n">01</div>
+            <h5>Proposal Presentation</h5>
+            <p>Initial concept and scope</p>
+            <a href="https://mysliit-my.sharepoint.com/:f:/g/personal/it22888884_my_sliit_lk/IgCaHQ8EoGGlRIsGmZTveJURAZagufSfe8WcEV4f2G6Vnlo?e=ORt0s5" class="btn-blue" target="_blank">Download ↗</a>
           </div>
         </div>
-
-        <!-- Navigation Tabs (Basic) -->
-        <ul class="nav nav-tabs" id="domainTab" role="tablist">
-          <li class="nav-item" role="presentation">
-            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#literature" type="button" role="tab">Literature survey</button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#gap" type="button" role="tab">Research gap</button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#problem" type="button" role="tab">Research problem</button>
-          </li>
-
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#objectives" type="button" role="tab">Rearch objectives</button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#methodology" type="button" role="tab">Methodology</button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#technologies" type="button" role="tab">Technologies used</button>
-          </li>
-        </ul>
-
-        <div class="tab-content mt-3">
-          <div class="tab-pane fade show active" id="literature" role="tabpanel">
-            <h4>Literature Survey</h4>
-            <p>Recent studies highlight the use of NLP and transformer models for resume parsing. GitHub-based question generation has emerged as a novel approach for technical screening. Attrition prediction using XGBoost and random forests shows promising accuracy. Market value assessment remains fragmented across salary databases. This research integrates all three components into a unified decision-support system.</p>
+        <div class="col-md-3">
+          <div class="pres-card">
+            <div class="pres-n">02</div>
+            <h5>Progress Presentation I</h5>
+            <p>50% completion checkpoint</p>
+            <a href="https://mysliit-my.sharepoint.com/:f:/g/personal/it22888884_my_sliit_lk/IgCaHQ8EoGGlRIsGmZTveJURAZagufSfe8WcEV4f2G6Vnlo?e=ORt0s5" class="btn-blue" target="_blank">Download ↗</a>
           </div>
-          <div class="tab-pane fade" id="problem" role="tabpanel">
-            <h4>Research Problem</h4>
-            <p>Traditional recruitment processes suffer from manual CV screening bias, lack of technical validation, inability to predict candidate attrition, and inconsistent compensation benchmarking. This leads to suboptimal hiring decisions and increased turnover costs.</p>
+        </div>
+        <div class="col-md-3">
+          <div class="pres-card">
+            <div class="pres-n">03</div>
+            <h5>Progress Presentation II</h5>
+            <p>90% completion checkpoint</p>
+            <a href="https://mysliit-my.sharepoint.com/:f:/g/personal/it22888884_my_sliit_lk/IgCaHQ8EoGGlRIsGmZTveJURAZagufSfe8WcEV4f2G6Vnlo?e=ORt0s5" class="btn-blue" target="_blank">Download ↗</a>
           </div>
-          <div class="tab-pane fade" id="gap" role="tabpanel">
-            <h4>Research Gap</h4>
-            <p>Existing HR tech solutions address either CV parsing OR skill assessment, but none combine GitHub-based dynamic question generation, early attrition risk prediction, and real-time market valuation in a single platform.</p>
-          </div>
-          <div class="tab-pane fade" id="objectives" role="tabpanel">
-            <h4>Research Objectives</h4>
-            <ul>
-              <li>Develop a GitHub-based question generation module to assess technical skills.</li>
-              <li>Build an early attrition risk prediction model using candidate profile data.</li>
-              <li>Create a market value assessment engine using live salary benchmarks.</li>
-              <li>Integrate all modules into a web-based dashboard for recruiters.</li>
-            </ul>
-          </div>
-          <div class="tab-pane fade" id="methodology" role="tabpanel">
-            <h4>Methodology</h4>
-            <p>Agile methodology combined with CRISP-DM for data science pipeline. Data collection from resumes (PDF/DOCX), GitHub API, and salary databases. Feature extraction using NLP embeddings. Models: Random Forest for attrition, regression for market value, and rule-based + LLM for question generation. Deployment via Flask API and Bootstrap frontend.</p>
-          </div>
-          <div class="tab-pane fade" id="technologies" role="tabpanel">
-            <h4>Technologies Used</h4>
-            <ul>
-              <li>Python (Pandas, Scikit-learn, PyTorch)</li>
-              <li>Flask / FastAPI (Backend)</li>
-              <li>GitHub REST API</li>
-              <li>React / Bootstrap (Frontend)</li>
-              <li>AWS / Google Cloud (Deployment)</li>
-              <li>PostgreSQL / MongoDB</li>
-            </ul>
+        </div>
+        <div class="col-md-3">
+          <div class="pres-card">
+            <div class="pres-n">04</div>
+            <h5>Final Presentation</h5>
+            <p>100% completion — full defence</p>
+            <span class="not-ready">Not ready yet</span>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- =============================================== -->
-    <!-- MILESTONES SECTION (timeline) -->
-    <!-- =============================================== -->
-    <section id="milestones">
-      <div class="container">
-        <div class="row">
-          <div class="col-12 text-center">
-            <h2>Project Milestones</h2>
-            <hr />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <!-- <div>
-              <h5>Topic Evaluation</h5>
-              <p>January 2025 | 5%</p>
-              <progress value="5" max="100">5%</progress>
-            </div> -->
-            <div class="mt-3">
-              <h5>Project Proposal</h5>
-              <p>February 2025 | 10%</p>
-              <progress value="10" max="100">10%</progress>
-            </div>
-            <div class="mt-3">
-              <h5>Progress presentation I</h5>
-              <p>April 2025 | 30%</p>
-              <progress value="30" max="100">30%</progress>
-            </div>
-            <div class="mt-3">
-              <h5>Progress presentation II</h5>
-              <p>April 2025 | 30%</p>
-              <progress value="30" max="100">30%</progress>
-            </div>
-            <div class="mt-3">
-              <h5>Final assessment</h5>
-              <p>April 2025 | 30%</p>
-              <progress value="30" max="100">30%</progress>
-            </div>
-            <div class="mt-3">
-              <h5>Viva</h5>
-              <p>April 2025 | 30%</p>
-              <progress value="30" max="100">30%</progress>
-            </div>
-            <!-- <div class="mt-3">
-              <h5>Attrition Risk Model</h5>
-              <p>June 2025 | 50%</p>
-              <progress value="50" max="100">50%</progress>
-            </div> -->
-          </div>
-          <div class="col-md-6">
-            <!-- <div>
-              <h5>Market Value Assessment</h5>
-              <p>August 2025 | 70%</p>
-              <progress value="70" max="100">70%</progress>
-            </div>
-            <div class="mt-3">
-              <h5>Research Paper Submission</h5>
-              <p>September 2025 | 80%</p>
-              <progress value="80" max="100">80%</progress>
-            </div>
-            <div class="mt-3">
-              <h5>Final Integration & Testing</h5>
-              <p>October 2025 | 90%</p>
-              <progress value="90" max="100">90%</progress>
-            </div>
-            <div class="mt-3">
-              <h5>Final Evaluation & Website Launch</h5>
-              <p>December 2025 | 100%</p>
-              <progress value="100" max="100">100%</progress>
-            </div> -->
-          </div>
+  <section id="team">
+    <div class="container">
+      <div class="row mb-5">
+        <div class="col-lg-6">
+          <div class="s-label">The People</div>
+          <h2 class="s-title">Team Members</h2>
+          <div class="s-rule"></div>
         </div>
       </div>
-    </section>
-
-    <!-- =============================================== -->
-    <!-- DOCUMENTS SECTION -->
-    <!-- =============================================== -->
-    <section id="documents">
-      <div class="container">
-        <div class="row">
-          <div class="col-12 text-center">
-            <h2>Project Documents</h2>
-            <hr />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-4">
-            <div>
-              <h5>Topic Assessment Form</h5>
-              <p>Scope, objectives, and project overview.</p>
-              <a href="https://mysliit-my.sharepoint.com/:f:/g/personal/it22888884_my_sliit_lk/IgCaHQ8EoGGlRIsGmZTveJURAZagufSfe8WcEV4f2G6Vnlo?e=ORt0s5" class="btn btn-outline-primary btn-sm">Download</a>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div>
-              <h5>Project Proposal</h5>
-              <p>Goals, timeline, and resource requirements.</p>
-              <a href="https://mysliit-my.sharepoint.com/:f:/g/personal/it22888884_my_sliit_lk/IgCaHQ8EoGGlRIsGmZTveJURAZagufSfe8WcEV4f2G6Vnlo?e=ORt0s5" class="btn btn-outline-primary btn-sm">Download</a>
-            </div>
-          </div>
-
-          <div class="col-md-4 mt-3">
-            <div>
-              <h5>Status Document</h5>
-              <p>Progress reports and checklists.</p>
-              <p>Not ready yet</p>
-
-              <!-- <a href="#" class="btn btn-outline-primary btn-sm">Download</a> -->
-            </div>
-          </div>
-          <div class="col-md-4 mt-3">
-            <div>
-              <h5>Final Document - (4 docs with the main)</h5>
-              <p>Complete research documentation.</p>
-              <p>Not ready yet</p>
-              <!-- <a href="#" class="btn btn-outline-primary btn-sm">Download</a> -->
-            </div>
-          </div>
-          <div class="col-md-4">
-            <!-- <div>
-              <h5>Research Paper</h5>
-              <p>Literature review and methodology.</p>
-              <a href="#" class="btn btn-outline-primary btn-sm">Download</a>
-            </div> -->
-          </div>
-
-          <div class="col-md-4 mt-3">
-            <!-- <div>
-              <h5>Research Logbook</h5>
-              <p>Daily/weekly research progress.</p>
-              <a href="#" class="btn btn-outline-primary btn-sm">Download</a>
-            </div> -->
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- =============================================== -->
-    <!-- PRESENTATIONS SECTION -->
-    <!-- =============================================== -->
-    <section id="presentations">
-      <div class="container">
-        <div class="row">
-          <div class="col-12 text-center">
-            <h2>Project Presentations</h2>
-            <hr />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-3">
-            <div>
-              <h5>Proposal Presentation</h5>
-              <p>Initial concept</p>
-              <a href="https://mysliit-my.sharepoint.com/:f:/g/personal/it22888884_my_sliit_lk/IgCaHQ8EoGGlRIsGmZTveJURAZagufSfe8WcEV4f2G6Vnlo?e=ORt0s5" class="btn btn-outline-primary btn-sm">Download</a>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div>
-              <h5>Progress Presentation I</h5>
-              <p>50% completion</p>
-              <a href="https://mysliit-my.sharepoint.com/:f:/g/personal/it22888884_my_sliit_lk/IgCaHQ8EoGGlRIsGmZTveJURAZagufSfe8WcEV4f2G6Vnlo?e=ORt0s5" class="btn btn-outline-primary btn-sm">Download</a>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div>
-              <h5>Progress Presentation II</h5>
-              <p>90% completion</p>
-              <a href="https://mysliit-my.sharepoint.com/:f:/g/personal/it22888884_my_sliit_lk/IgCaHQ8EoGGlRIsGmZTveJURAZagufSfe8WcEV4f2G6Vnlo?e=ORt0s5" class="btn btn-outline-primary btn-sm">Download</a>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div>
-              <h5>Final Presentation</h5>
-              <p>100% completion</p>
-              <p>Not ready yet</p>
-              <!-- <a href="#" class="btn btn-outline-primary btn-sm">Download</a> -->
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- =============================================== -->
-    <!-- TEAM SECTION -->
-    <!-- =============================================== -->
-    <section id="team">
-      <div class="container">
-        <div class="row">
-          <div class="col-12 text-center">
-            <h2>Team Members</h2>
-            <hr />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-3 text-center">
-            <img src="" alt="Team Member" class="img-fluid rounded-circle" />
+      <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+          <div class="member-card">
+            <div class="avatar">PM</div>
             <h5>Pramuditha Mendis</h5>
-            <p>Data science undergraduate</p>
+            <p>Data Science Undergraduate</p>
           </div>
-          <div class="col-md-3 text-center">
-            <img src="" alt="Team Member" class="img-fluid rounded-circle" />
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="member-card">
+            <div class="avatar">YS</div>
             <h5>Yashodhara Sandeepani</h5>
-            <p>Data science undergraduate</p>
+            <p>Data Science Undergraduate</p>
           </div>
-          <div class="col-md-3 text-center">
-            <img src="" alt="Team Member" class="img-fluid rounded-circle" />
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="member-card">
+            <div class="avatar">PP</div>
             <h5>Piyara Perera</h5>
-            <p>Data science undergraduate</p>
+            <p>Data Science Undergraduate</p>
           </div>
-          <div class="col-md-3 text-center">
-            <img src="" alt="Team Member" class="img-fluid rounded-circle" />
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="member-card">
+            <div class="avatar">CP</div>
             <h5>Chanmi Peiris</h5>
-            <p>Data science undergraduate</p>
-          </div>
-        </div>
-        <div class="row mt-4">
-          <div class="col-md-6 text-center">
-            <h5>Supervisor</h5>
-            <p>Hansi De Silva<br />Lecturer, Sri Lanka Institute of Information Technology</p>
-          </div>
-          <div class="col-md-6 text-center">
-            <h5>Co-Supervisor</h5>
-            <p>Mr. Samadhi Rathnayake<br />Lecturer, Sri Lanka Institute of Information Technology</p>
+            <p>Data Science Undergraduate</p>
           </div>
         </div>
       </div>
-    </section>
-
-    <!-- =============================================== -->
-    <!-- CONTACT SECTION -->
-    <!-- =============================================== -->
-    <section id="contact">
-      <div class="container">
-        <div class="row">
-          <div class="col-12 text-center">
-            <h2>Contact Us</h2>
-            <hr />
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="sup-row">
+            <div class="avatar flex-shrink-0" style="width:52px;height:52px;font-size:0.75rem;">HDS</div>
+            <div>
+              <span class="sup-badge">Supervisor</span>
+              <h5>Hansi De Silva</h5>
+              <p>Lecturer, Sri Lanka Institute of Information Technology</p>
+            </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-8 mx-auto">
-            <form action="#" method="POST">
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <input type="text" class="form-control" name="first_name" placeholder="First Name" required />
-                </div>
-                <div class="col-md-6 mb-3">
-                  <input type="text" class="form-control" name="last_name" placeholder="Last Name" required />
-                </div>
-              </div>
-              <div class="mb-3">
-                <input type="email" class="form-control" name="email" placeholder="Email Address" required />
-              </div>
-              <div class="mb-3">
-                <input type="text" class="form-control" name="subject" placeholder="Subject" required />
-              </div>
-              <div class="mb-3">
-                <textarea class="form-control" name="message" rows="5" placeholder="Your Message" required></textarea>
-              </div>
-              <div class="text-center">
-                <button type="submit" class="btn btn-primary">Send Message</button>
-              </div>
-            </form>
-          </div>
-        </div>
-        <div class="row mt-4 text-center">
-          <div class="col-md-4">
-            <h6>Email</h6>
-            <p>test@test.edu</p>
-          </div>
-          <div class="col-md-4">
-            <h6>Phone</h6>
-            <p>+94 77 777 7777</p>
-          </div>
-          <div class="col-md-4">
-            <h6>Address</h6>
-            <p>Department of IT, Faculty of Computing, SLIIT, Malabe, Sri Lanka</p>
+        <div class="col-md-6">
+          <div class="sup-row">
+            <div class="avatar flex-shrink-0" style="width:52px;height:52px;font-size:0.75rem;">SR</div>
+            <div>
+              <span class="sup-badge">Co-Supervisor</span>
+              <h5>Mr. Samadhi Rathnayake</h5>
+              <p>Lecturer, Sri Lanka Institute of Information Technology</p>
+            </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- =============================================== -->
-    <!-- FOOTER -->
-    <!-- =============================================== -->
-    <footer>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-5">
-            <h5>AI-Based CV Analysis System</h5>
-            <p>Revolutionizing recruitment through AI-driven insights: question generation, attrition prediction, and market valuation.</p>
-            <p>&copy; 2025 TalentScan AI. All rights reserved.</p>
-          </div>
-          <div class="col-md-3">
-            <h5>Quick Links</h5>
-            <ul class="list-unstyled">
-              <li><a href="#hero">Home</a></li>
-              <li><a href="#about">About</a></li>
-              <li><a href="#documents">Documents</a></li>
-              <li><a href="#presentations">Presentations</a></li>
-            </ul>
-          </div>
-          <div class="col-md-4">
-            <h5>Project Modules</h5>
-            <ul class="list-unstyled">
-              <li>GitHub Question Generation</li>
-              <li>Early Attrition Risk Prediction</li>
-              <li>Market Value Assessment</li>
-              <li>Recruitment Dashboard</li>
-            </ul>
+  <section id="contact">
+    <div class="container">
+      <div class="row mb-5">
+        <div class="col-lg-6">
+          <div class="s-label">Get in touch</div>
+          <h2 class="s-title">Contact Us</h2>
+          <div class="s-rule"></div>
+        </div>
+      </div>
+      <div class="row g-5">
+        <div class="col-lg-7">
+          <form action="#" method="POST">
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <input type="text" class="form-control" placeholder="First Name" required />
+              </div>
+              <div class="col-md-6">
+                <input type="text" class="form-control" placeholder="Last Name" required />
+              </div>
+            </div>
+            <div class="mb-3"><input type="email" class="form-control" placeholder="Email Address" required /></div>
+            <div class="mb-3"><input type="text" class="form-control" placeholder="Subject" required /></div>
+            <div class="mb-4"><textarea class="form-control" rows="5" placeholder="Your Message" required></textarea></div>
+            <button type="submit" class="btn-submit">Send Message</button>
+          </form>
+        </div>
+        <div class="col-lg-4 offset-lg-1">
+          <div class="d-flex flex-column gap-4 pt-2">
+            <div class="contact-meta">
+              <h6>Email</h6>
+              <p>test@test.edu</p>
+            </div>
+            <div class="contact-meta">
+              <h6>Phone</h6>
+              <p>+94 77 777 7777</p>
+            </div>
+            <div class="contact-meta">
+              <h6>Address</h6>
+              <p>Department of IT, Faculty of Computing, SLIIT, Malabe, Sri Lanka</p>
+            </div>
           </div>
         </div>
       </div>
-    </footer>
+    </div>
+  </section>
 
-    <!-- Bootstrap JS Bundle (for navbar toggle and tab functionality) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
+  <footer>
+    <div class="container">
+      <div class="row g-4 align-items-start">
+        <div class="col-md-5">
+          <div class="footer-brand">TalentScan <span>AI</span></div>
+          <p>Revolutionizing recruitment through AI-driven insights — question generation, attrition prediction, and market valuation.</p>
+          <p style="margin-top:0.5rem;">&copy; 2025 TalentScan AI. All rights reserved.</p>
+        </div>
+        <div class="col-md-3">
+          <h6>Quick Links</h6>
+          <ul>
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#documents">Documents</a></li>
+            <li><a href="#presentations">Presentations</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h6>Modules</h6>
+          <ul>
+            <li>GitHub Question Generation</li>
+            <li>Early Attrition Risk Prediction</li>
+            <li>Market Value Assessment</li>
+            <li>Multi-Source Candidate Evaluation</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
