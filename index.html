@@ -452,20 +452,20 @@
       box-shadow: 0 4px 20px rgba(24, 71, 200, 0.07);
     }
 
-    .avatar {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      background: var(--blue-light);
-      color: var(--blue);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 0.82rem;
-      margin: 0 auto 1rem;
-      border: 1px solid rgba(24, 71, 200, 0.15);
-    }
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto 1rem;
+  border: 1px solid rgba(24, 71, 200, 0.15);
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
     .member-card h5 {
       font-size: 0.9rem;
@@ -809,7 +809,7 @@
         <div class="col-md-4">
           <div class="card-plain">
             <span class="card-tag">Status</span>
-            <h5>Status Document</h5>
+            <h5>Checklist Documents</h5>
             <p>Progress reports and completion checklists.</p>
             <span class="not-ready">Not ready yet</span>
           </div>
@@ -884,28 +884,36 @@
       <div class="row g-3 mb-4">
         <div class="col-6 col-md-3">
           <div class="member-card">
-            <div class="avatar">PM</div>
+            <div class="avatar">
+                <img src="assets/pramuditha.png" alt="Avatar">
+            </div>
             <h5>Pramuditha Mendis</h5>
             <p>Data Science Undergraduate</p>
           </div>
         </div>
         <div class="col-6 col-md-3">
           <div class="member-card">
-            <div class="avatar">YS</div>
+            <div class="avatar">
+                <img src="assets/yashodhara.png" alt="Avatar">
+            </div>
             <h5>Yashodhara Sandeepani</h5>
             <p>Data Science Undergraduate</p>
           </div>
         </div>
         <div class="col-6 col-md-3">
           <div class="member-card">
-            <div class="avatar">PP</div>
+            <div class="avatar">
+                <img src="assets/piyara.png" alt="Avatar">
+            </div>
             <h5>Piyara Perera</h5>
             <p>Data Science Undergraduate</p>
           </div>
         </div>
         <div class="col-6 col-md-3">
           <div class="member-card">
-            <div class="avatar">CP</div>
+            <div class="avatar">
+                <img src="assets/chanmi.png" alt="Avatar">
+            </div>
             <h5>Chanmi Peiris</h5>
             <p>Data Science Undergraduate</p>
           </div>
